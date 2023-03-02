@@ -74,7 +74,8 @@ class ViewController: UIViewController {
         return true
     }
     
-    // MARK: - DispatchSource
+    // MARK: - DispatchSource 调度源
+    /// DispatchSource 用于检测文件和文件夹的变化。
     func exampleDispatchSource() {
         let urlPath = URL(fileURLWithPath: "/PathToYourFile/log.txt")
         do {
@@ -94,6 +95,7 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Dispatch Barrier
+    /// “这会使线程不安全对象变得线程安全。” —— Apple Docs
     func exampleDispatchBarrier() {
         let concurrentQueue = DispatchQueue(label: "com.kraken.barrier", attributes: .concurrent)
         
@@ -115,6 +117,8 @@ class ViewController: UIViewController {
     }
     
     // MARK: -  Operation Queue Group With Depenecy
+    /// 如果你正在使用 NSOperation，这意味着你在页面逻辑背后使用了 GCD，因为 NSOperation 是建立在 GCD 之上的。
+    /// NSOperation 的一些好处是，它有一个更友好的接口来处理 Dependencies（按特定顺序执行任务），它是可观察的（KVO 来观察属性），有暂停、取消、恢复和控制（你可以指定队列中任务的数量）。
     func exampleOperationQueueGroupWithDepenecy() {
         let task1 = BlockOperation {
             print("Task 1")
@@ -200,6 +204,12 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Example of Bakckground / Main Thread Switch
+    /// 如果你注意到上面的代码示例，你可以看到 “qos” 这个词。它指的是服务质量。通过这个参数，我们可以定义如下的优先级。
+    /// background — 当一个任务对时间不敏感，或者当用户可以在这个过程中做一些其他的互动时，我们可以使用这个方法。比如预先获取一些图片做预加载，或者在后台处理一些数据。
+    /// 这个任务的执行需要一定的时间，几秒或者几分钟，甚至几个小时。
+    /// utility — 长期运行的任务。一些用户可以看到处理过程。例如，下载一些带有指标的地图。这个任务可能需要几秒钟甚至几十分钟的时间。
+    /// userInitiated — 用户从用户界面启动一些任务并等待结果以继续与应用程序交互。这个任务需要几秒钟或一瞬间。
+    /// userInteractive — 用户需要立即完成某些任务，以便能够继续与应用程序进行下一次交互。是一个即时任务。
     func exampleBackToMain() {
         DispatchQueue.global(qos: .background).async {
             print("🔵 DispatchQueue.global Thread name: \(Thread.current.name ?? "none") IsMain: \(Thread.isMainThread) IsMultithread: \(Thread.isMultiThreaded())")
