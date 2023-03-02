@@ -246,7 +246,7 @@ class ViewController: UIViewController {
         // 3. When all are finished Notify. This notify will be configured to be on background thread
         let queueType = DispatchQueue.global(qos: .userInitiated)
         group.notify(queue: queueType) {
-            print("🔴 DispatchGroup - notify: All task Finished.")
+            print("🔴 DispatchGroup - notify: All task Finished. Thread name: \(Thread.current.name ?? "none") IsMain: \(Thread.isMainThread) IsMultithread: \(Thread.isMultiThreaded())")
             DispatchQueue.main.async {
                 self.loadingLabel.text = "🟢 Done"
             }
